@@ -49,20 +49,20 @@ class IntegerField(Field):
     def __init__(self, name):
         super(IntegerField, self).__init__(name, 'bigint')
 class ModelMetaclass(type):
-    def __new__(cls,name,bases,attrs):
-        if name == 'Model':
-            return type.__new__(cls,name,bases,attrs)
-        print('Found model:%s' % name)
+    def __new__(cls, name, bases, attrs):
+        if name=='Model':
+            return type.__new__(cls, name, bases, attrs)
+        print('Found model: %s' % name)
         mappings = dict()
-        for k,v in attrs.items():
-            if isinstance(v,Field):
-                print('Found mapping:%s==>%s' % (k,v))
+        for k, v in attrs.items():
+            if isinstance(v, Field):
+                print('Found mapping: %s ==> %s' % (k, v))
                 mappings[k] = v
-            for k in mappings.keys():
-                attrs.pop(k)
-            attrs['__mappings__'] = mappings
-            attrs['__table__'] = name
-            return type.__new__(cls,name,bases,attrs)
+        for k in mappings.keys():
+            attrs.pop(k)
+        attrs['__mappings__'] = mappings # 保存属性和列的映射关系
+        attrs['__table__'] = name # 假设表名和类名一致
+        return type.__new__(cls, name, bases, attrs)
 class Model(dict,metaclass=ModelMetaclass):
     def __init__(self,**kw):
         super(Model,self).__init__(**kw)
