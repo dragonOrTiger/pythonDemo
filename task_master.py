@@ -23,5 +23,5 @@ print('Try get results...')
 for i in range(10):
     r = result.get(timeout=10)
     print('Result:%s' % r)
-manager.shudown()
+manager.shutdown()
 print('master exit.')
